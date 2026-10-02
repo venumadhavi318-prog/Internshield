@@ -1,0 +1,11 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>My Checks — InternShield</title><link rel="stylesheet" href="style.css"></head>
+<body><header class="nav"><div class="brand">🛡️ Intern<span>Shield</span></div><a href="/">← Checker</a></header>
+<main class="adminWrap"><p class="eyebrow">STUDENT DASHBOARD</p><h1>My internship checks</h1><div id="status" class="panel">Loading…</div></main>
+<script type="module">
+import {watchAuth,getMyAnalyses} from "./js/firebase.js";
+watchAuth(async u=>{
+ if(!u){location.href="/";return}
+ const rows=await getMyAnalyses(u);
+ document.getElementById("status").innerHTML=rows.length?rows.map(x=>`<div class="signal"><b>${x.company||"Unknown company"} — <span class="risk ${String(x.level).toLowerCase()}">${x.level} (${x.score}/100)</span></b><span>${x.title||"Internship"} · ${x.createdAt?.toDate?x.createdAt.toDate().toLocaleString():"Saved"}</span></div>`).join(""):"No saved checks yet.";
+});
+</script></body></html>

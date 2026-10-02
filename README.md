@@ -43,11 +43,18 @@ Firebase is now integrated for student authentication, Firestore analysis histor
 
 ## Scroll-Driven Hero Assignment Features
 The homepage now includes the requested animation-focused assignment layer:
-- Full first-screen hero section with letter-spaced headline.
-- Percentage impact metrics with staggered entrance/count-up animation.
-- GSAP + ScrollTrigger initial-load and scroll-driven motion.
-- Main InternShield visual moves, scales and rotates from scroll progress.
-- A dedicated scroll-story section demonstrates Detect → Verify → Decide motion.
-- Uses transform-based animation and `scrub` interpolation for smooth scrolling.
-- Respects `prefers-reduced-motion`.
+- Full first-screen hero section ("INTERNSHIP SAFETY, REIMAGINED") with letter-spaced eyebrow typography.
+- Product demo metrics (95% / 12+ / 24/7) with individual staggered entrance and count-up animation, clearly labelled as demo values.
+- GSAP + ScrollTrigger initial-load timeline and scroll-driven motion.
+- The main InternShield shield visual moves right, scales, rotates, moves left and settles — driven directly by scroll progress via `scrub`.
+- A dedicated scroll-story section (01 Discover → 02 Analyze → 03 Verify) whose stages reveal progressively with scroll.
+- Uses transform/opacity/scale/rotation only for smooth, GPU-friendly animation.
+- Responsive: movement distance and scale are reduced on tablet/mobile; no horizontal overflow.
+- Respects `prefers-reduced-motion` by disabling non-essential animation and rendering the final state.
+- GSAP is loaded from `public/vendor/` (vendored from the npm `gsap` package, no CDN dependency at runtime).
+- The animation layer lives in `public/js/animations.js` and is independent of the Firebase module, so a Firebase/CDN failure never breaks the landing animations (and vice versa).
 - Existing internship checker, Firebase student history, authentication, and admin dashboard are preserved.
+
+## Landing page structure
+Navbar → Hero → Statistics → Scroll-driven verification story → How it works → Risk signals → Call to action → Checker → Footer.
+

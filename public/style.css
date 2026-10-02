@@ -289,6 +289,17 @@ textarea{resize:vertical;min-height:120px}
 .modal{position:fixed;inset:0;background:rgba(11,16,32,.55);backdrop-filter:blur(3px);display:grid;place-items:center;z-index:50;padding:20px}
 .hidden{display:none!important}
 .modalBox{position:relative;background:#fff;border-radius:var(--radius);padding:30px;width:min(430px,100%);box-shadow:var(--shadow-lg)}
+#authTitle{font-size:22px;font-weight:800;letter-spacing:-.02em;margin:0 0 18px;padding-right:34px}
+.googleBtn{
+  display:flex;align-items:center;justify-content:center;gap:10px;width:100%;
+  padding:12px 16px;border:1px solid var(--line-strong);border-radius:12px;
+  background:#fff;color:var(--ink);font-weight:700;cursor:pointer;
+  transition:border-color .18s ease,background .18s ease,transform .18s ease;
+}
+.googleBtn:hover{border-color:#c3c9da;background:#fbfcff;transform:translateY(-1px)}
+.googleBtn:disabled{opacity:.6;cursor:default;transform:none}
+.divider{display:flex;align-items:center;gap:12px;margin:18px 0;color:var(--muted-2);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em}
+.divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--line)}
 .close{position:absolute;right:14px;top:10px;border:0;background:none;font-size:26px;line-height:1;cursor:pointer;color:var(--muted);border-radius:8px;padding:4px 8px}
 .close:hover{background:var(--bg);color:var(--ink)}
 .textBtn{border:0;background:none;color:var(--accent);cursor:pointer;margin-top:12px;font-weight:700;padding:6px 2px}

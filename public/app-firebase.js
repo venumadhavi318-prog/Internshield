@@ -1,4 +1,4 @@
-import { auth, signupStudent, loginStudent, saveAnalysis, watchAuth } from "./js/firebase.js";
+import { auth, signupStudent, loginStudent, loginWithGoogle, saveAnalysis, watchAuth } from "./js/firebase.js";
 
 let isSignup = false, currentUser = null;
 const $ = id => document.getElementById(id);
@@ -45,6 +45,19 @@ function esc(s) { return String(s).replace(/[&<>"']/g, m => ({ "&": "&amp;", "<"
 
 $("loginBtn").onclick = () => openAuth(false);
 $("toggleAuth").onclick = () => openAuth(!isSignup);
+$("googleBtn").onclick = async () => {
+  const btn = $("googleBtn");
+  btn.disabled = true;
+  $("authMsg").textContent = "";
+  try {
+    await loginWithGoogle();
+    modal.classList.add("hidden");
+  } catch (err) {
+    if (err && err.code !== "auth/popup-closed-by-user" && err.code !== "auth/cancelled-popup-request") {
+      $("authMsg").textContent = friendlyAuthError(err);
+    }
+  } finally { btn.disabled = false; }
+};
 $("adminBtn").onclick = async () => {
   const email = prompt("Admin email:");
   const password = prompt("Admin password:");
@@ -90,6 +103,9 @@ function friendlyAuthError(err) {
     "auth/invalid-credential": "Incorrect email or password.",
     "auth/too-many-requests": "Too many attempts. Please wait a moment and try again.",
     "auth/unauthorized-domain": "This domain is not authorized in Firebase Authentication settings.",
+    "auth/popup-blocked": "Your browser blocked the Google sign-in popup. Please allow popups and try again.",
+    "auth/popup-closed-by-user": "",
+    "auth/account-exists-with-different-credential": "An account already exists with this email using a different sign-in method.",
     "auth/network-request-failed": "Network error. Check your connection and try again."
   };
   return map[code] || "Something went wrong. Please try again.";

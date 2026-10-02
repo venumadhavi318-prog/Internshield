@@ -2,6 +2,7 @@
 
 1. Create a Firebase project.
 2. Enable Authentication → Sign-in method → **Email/Password** → Enable.
+   Also enable **Google** if you want the "Continue with Google" button to work.
 3. Create a Firestore database.
 4. Enable Storage.
 5. The Web App config is already set in `public/js/firebase-config.js`
@@ -12,6 +13,14 @@
    npm install
    npm start
 9. Open http://localhost:3000
+
+## Sign-in methods
+- Email/password: the login modal's form (student signup + login).
+- Google: the "Continue with Google" button in the same modal, using
+  `signInWithPopup`. A Google user gets a `users/{uid}` profile created on
+  first sign-in. The Google popup requires the current domain to be listed
+  under Authentication → Settings → Authorized domains (`localhost` is
+  allowed by default).
 
 ## Troubleshooting
 - `auth/configuration-not-found` (HTTP 400 `CONFIGURATION_NOT_FOUND`): the

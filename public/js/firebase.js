@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc, addDoc, collection, query, orderBy, limit, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-storage.js";
 import { firebaseConfig } from "./firebase-config.js";
@@ -8,6 +8,20 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
+
+async function ensureUserProfile(user) {
+  const userRef = doc(db, "users", user.uid);
+  const snap = await getDoc(userRef);
+  if (!snap.exists()) {
+    await setDoc(userRef, {
+      uid: user.uid,
+      name: user.displayName || "",
+      email: user.email || "",
+      role: "student",
+      createdAt: serverTimestamp()
+    });
+  }
+}
 
 export async function signupStudent(name,email,password){
   const cred=await createUserWithEmailAndPassword(auth,email,password);
@@ -18,6 +32,13 @@ export async function signupStudent(name,email,password){
 }
 export async function loginStudent(email,password){
   const cred=await signInWithEmailAndPassword(auth,email,password);
+  return cred.user;
+}
+export async function loginWithGoogle(){
+  const provider=new GoogleAuthProvider();
+  provider.setCustomParameters({ prompt:"select_account" });
+  const cred=await signInWithPopup(auth,provider);
+  await ensureUserProfile(cred.user);
   return cred.user;
 }
 export async function logoutStudent(){ await signOut(auth); }

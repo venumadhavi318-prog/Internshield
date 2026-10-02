@@ -1,6 +1,31 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>InternShield Admin</title><link rel="stylesheet" href="style.css"></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>InternShield Admin</title><link rel="stylesheet" href="style.css">
+<style>
+  /* Standalone admin dashboard styles so this page stays self-contained. */
+  :root{--ink:#0b1020;--line:#e4e7f0;--panel:#fff}
+  body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:#f6f7fb;color:var(--ink)}
+  .nav{display:flex;justify-content:space-between;align-items:center;padding:16px 26px;background:#0b1020;color:#fff}
+  .nav a,.nav .brand{color:#fff;text-decoration:none;font-weight:700}
+  .nav small{opacity:.7;font-weight:600;letter-spacing:.08em}
+  .adminWrap{max-width:1060px;margin:0 auto;padding:30px 22px 60px}
+  .sectionHead{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+  .eyebrow{text-transform:uppercase;letter-spacing:.24em;font-size:12px;font-weight:700;color:#4f5bd5;margin:0 0 6px}
+  .sectionHead h1{margin:0;font-size:26px}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:22px}
+  .stats>div{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .stats small{display:block;color:#5b6478;font-weight:600;margin-bottom:6px}
+  .stats strong{font-size:26px}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .ghost{background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px 14px;font-weight:700;cursor:pointer}
+  .table{display:flex;flex-direction:column;font-size:14px}
+  .tr{display:grid;grid-template-columns:1.3fr 1fr 1.4fr .8fr;gap:10px;padding:10px 6px;border-bottom:1px solid var(--line)}
+  .th{font-weight:700;color:#5b6478;border-bottom:2px solid var(--line)}
+  .risk{font-weight:700}
+  .risk.high{color:#c02a2a}.risk.medium{color:#b06a00}.risk.low{color:#1c7a44}
+  @media(max-width:760px){.stats{grid-template-columns:1fr 1fr}.tr{grid-template-columns:1fr 1fr}}
+</style>
+</head>
 <body>
 <header class="nav"><div class="brand">🛡️ Intern<span>Shield</span> <small>ADMIN</small></div><a href="/">← Back to site</a></header>
 <main class="adminWrap">
@@ -15,13 +40,13 @@
 </main>
 <script>
 async function load(){
-  const key=localStorage.getItem("internshield_admin_key");
+  const key=localStorage.getItem("internshield_admin_token");
   if(!key){ location.href="/"; return; }
   const [s,d]=await Promise.all([
     fetch("/api/admin/stats",{headers:{"x-admin-key":key}}),
     fetch("/api/admin/submissions",{headers:{"x-admin-key":key}})
   ]);
-  if(!s.ok){ localStorage.removeItem("internshield_admin_key"); location.href="/"; return; }
+  if(!s.ok){ localStorage.removeItem("internshield_admin_token"); location.href="/"; return; }
   const stats=await s.json(), rows=await d.json();
   ["total","high","medium","low"].forEach(k=>document.getElementById(k).textContent=stats[k]);
   document.getElementById("table").innerHTML=rows.length?`<div class="table"><div class="tr th"><span>Date</span><span>Company</span><span>Offer</span><span>Risk</span></div>${rows.slice(0,50).map(x=>`<div class="tr"><span>${new Date(x.createdAt).toLocaleString()}</span><span>${esc(x.company||"—")}</span><span>${esc(x.title||"—")}</span><span class="risk ${x.level.toLowerCase()}">${x.level} · ${x.score}</span></div>`).join("")}</div>`:"No analyses yet.";

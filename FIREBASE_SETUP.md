@@ -33,7 +33,10 @@
   the student is signed in before writing history.
 
 ## Admin
-The demo admin remains server-side in `server.js`. For a production deployment, replace the demo admin key flow with Firebase Admin SDK/custom claims and server-side session validation.
+Admin sign-in happens through the same login modal used by students. The server
+issues an in-memory session token; set `ADMIN_EMAIL` / `ADMIN_PASSWORD` in `.env`.
+For a production deployment, replace the demo admin flow with Firebase Admin
+SDK/custom claims and persistent server-side session validation.
 
 ## Gemini
 No Gemini key is required for the included detector. If you add Gemini, call it from the Express backend and store the key in `.env`, never in frontend code.

@@ -58,16 +58,7 @@ $("googleBtn").onclick = async () => {
     }
   } finally { btn.disabled = false; }
 };
-$("adminBtn").onclick = async () => {
-  const email = prompt("Admin email:");
-  const password = prompt("Admin password:");
-  if (!email || !password) return;
-  const r = await fetch("/api/auth/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email, password }) });
-  const d = await r.json();
-  if (d.role !== "admin") { alert(d.error || "Admin login failed"); return; }
-  const k = await fetch("/api/admin/key").then(x => x.json());
-  localStorage.setItem("internshield_admin_key", k.key); location.href = "/admin.html";
-};
+$("adminBtn").onclick = () => { openAuth(false); $("authMsg").textContent = "Administrator: sign in with your admin credentials."; };
 document.querySelector("[data-close]").onclick = () => modal.classList.add("hidden");
 modal.addEventListener("click", e => { if (e.target === modal) modal.classList.add("hidden"); });
 
@@ -79,8 +70,30 @@ function openAuth(signup) {
 }
 $("authForm").onsubmit = async e => {
   e.preventDefault();
+  const email = $("authEmail").value, password = $("authPassword").value;
+
+  // The administrator signs in through this same form and lands on the dashboard.
   try {
-    const email = $("authEmail").value, password = $("authPassword").value;
+    const r = await fetch("/api/auth/login", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password })
+    });
+    const d = await r.json();
+    if (d.role === "admin") {
+      const lr = await fetch("/api/admin/login", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
+      if (!lr.ok) { $("authMsg").textContent = "Admin sign-in failed. Please try again."; return; }
+      const { token } = await lr.json();
+      localStorage.setItem("internshield_admin_token", token);
+      modal.classList.add("hidden");
+      location.href = "/admin.html";
+      return;
+    }
+  } catch { /* fall through to student login */ }
+
+  try {
     if (isSignup) {
       await signupStudent($("authName").value, email, password);
       $("authMsg").textContent = "Account created. You are signed in.";

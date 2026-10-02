@@ -10,28 +10,43 @@ InternShield is a full-stack web app that helps students assess internship offer
 - AI/API: Optional. The included detector works without an external API.
 
 ## Run
-1. Install Node.js.
-2. Open a terminal in this folder.
-3. Run:
+1. Install Node.js (20.12+ so the built-in `.env` loader is available).
+2. Copy the environment template and adjust it:
+   cp .env.example .env
+3. Open a terminal in this folder.
+4. Run:
    npm install
    npm start
-4. Open http://localhost:3000
+5. Open http://localhost:3000
+
+## Environment variables
+Settings are read from a `.env` file in the project root (loaded automatically
+by the server; `.env` is git-ignored, `.env.example` is committed):
+
+| Variable | Purpose | Default |
+|---|---|---|
+| `PORT` | HTTP port | `3000` |
+| `ADMIN_EMAIL` | Administrator sign-in email | `admin@internshield.local` |
+| `ADMIN_PASSWORD` | Administrator sign-in password | `Admin@12345` |
 
 ## Demo admin
-Email: admin@internshield.local
-Password: Admin@12345
+Sign in through the normal login modal: click **Admin**, then enter the
+administrator email/password. The server validates the credentials, issues a
+random in-memory session token, and the browser is redirected to the dashboard.
 
-Change the admin credentials in `server.js` before publishing.
+Change `ADMIN_EMAIL` / `ADMIN_PASSWORD` in `.env` before publishing.
 
 ## API
 The backend exposes:
 POST /api/analyze
 POST /api/auth/signup
 POST /api/auth/login
-GET /api/admin/submissions
-GET /api/admin/stats
+POST /api/admin/login
+GET /api/admin/submissions   (requires admin session token)
+GET /api/admin/stats         (requires admin session token)
 
-The `/api/analyze` endpoint uses a transparent rule-based scoring engine. This is intentional: the project runs without paid API keys.
+The `/api/analyze` endpoint uses a transparent rule-based scoring engine that
+runs entirely inside InternShield, with no external service required.
 
 ## Optional AI upgrade
 You can later connect Gemini/OpenAI in the backend. Keep the API key only in a server-side `.env` file; never put it in frontend JavaScript.

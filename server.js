@@ -4,6 +4,12 @@ const path = require("path");
 const crypto = require("crypto");
 
 const app = express();
+
+// Load environment variables from .env (Node 20.12+ built-in loader).
+// Silently ignored when the file is absent; works however the server is started.
+try { process.loadEnvFile(path.join(__dirname, ".env")); }
+catch (err) { if (err.code !== "ENOENT") console.warn("Could not load .env:", err.message); }
+
 const PORT = process.env.PORT || 3000;
 const ROOT = __dirname;
 const DATA = path.join(ROOT, "data");
@@ -139,15 +145,24 @@ app.post("/api/analyze", (req,res) => {
   res.json(result);
 });
 
+// Admin sessions: verified logins receive a random, in-memory token.
+const adminSessions = new Set();
+const sessionHeader = req => (req.headers.authorization || "").replace(/^Bearer\s+/i, "") || req.headers["x-admin-key"];
+
 function adminOnly(req,res,next) {
-  const key = req.headers["x-admin-key"];
-  if (key !== hash(ADMIN_EMAIL + ADMIN_PASSWORD)) return res.status(401).json({error:"Admin authentication required."});
+  const token = sessionHeader(req);
+  if (!token || !adminSessions.has(token)) return res.status(401).json({error:"Admin authentication required."});
   next();
 }
 
-app.get("/api/admin/key", (req,res) => {
-  // Demo-only helper. In production use a proper session/JWT instead.
-  res.json({key: hash(ADMIN_EMAIL + ADMIN_PASSWORD)});
+// Exchange admin credentials for a session token (no credentials are returned).
+app.post("/api/admin/login", (req,res) => {
+  const email = clean(req.body.email,150).toLowerCase();
+  const password = String(req.body.password || "");
+  if (email !== ADMIN_EMAIL || password !== ADMIN_PASSWORD) return res.status(401).json({error:"Invalid admin credentials."});
+  const token = crypto.randomBytes(32).toString("hex");
+  adminSessions.add(token);
+  res.json({ token, expiresIn: 8 * 60 * 60 * 1000 });
 });
 
 app.get("/api/admin/submissions", adminOnly, (req,res) => {
@@ -163,6 +178,9 @@ app.get("/api/admin/stats", adminOnly, (req,res) => {
     low:data.filter(x=>x.level==="LOW").length
   });
 });
+
+// Unknown API routes should not fall through to the SPA page.
+app.use("/api", (req,res) => res.status(404).json({error:"Not found"}));
 
 app.get("*", (req,res) => res.sendFile(path.join(PUBLIC, "index.html")));
 

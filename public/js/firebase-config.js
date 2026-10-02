@@ -1,10 +1,11 @@
-// Copy your Firebase Web App config from Firebase Console here.
+// Firebase Web App config (public by design — access is enforced by Firestore/Storage rules).
 // Do NOT put service-account/private-key JSON in this file.
 export const firebaseConfig = {
-  apiKey: "YOUR_FIREBASE_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.firebasestorage.app",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_FIREBASE_APP_ID"
+  apiKey: "AIzaSyBaKE16Qudj6_7kre3OOHrtItVm9FWxA2k",
+  authDomain: "internshield-6e086.firebaseapp.com",
+  projectId: "internshield-6e086",
+  storageBucket: "internshield-6e086.firebasestorage.app",
+  messagingSenderId: "977933549880",
+  appId: "1:977933549880:web:a25a153dd1cc55951e41cd",
+  measurementId: "G-397Q5ZKWR2"
 };

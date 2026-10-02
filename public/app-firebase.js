@@ -74,8 +74,26 @@ $("authForm").onsubmit = async e => {
     } else {
       await loginStudent(email, password); modal.classList.add("hidden");
     }
-  } catch (err) { $("authMsg").textContent = err.message; }
+  } catch (err) { $("authMsg").textContent = friendlyAuthError(err); }
 };
+
+function friendlyAuthError(err) {
+  const code = err && err.code ? err.code : "";
+  const map = {
+    "auth/configuration-not-found": "Login is not enabled yet. Enable Email/Password in Firebase Authentication.",
+    "auth/operation-not-allowed": "This sign-in method is disabled in Firebase Authentication.",
+    "auth/email-already-in-use": "An account with this email already exists. Try logging in.",
+    "auth/invalid-email": "Please enter a valid email address.",
+    "auth/weak-password": "Password should be at least 6 characters.",
+    "auth/user-not-found": "No account found for that email.",
+    "auth/wrong-password": "Incorrect email or password.",
+    "auth/invalid-credential": "Incorrect email or password.",
+    "auth/too-many-requests": "Too many attempts. Please wait a moment and try again.",
+    "auth/unauthorized-domain": "This domain is not authorized in Firebase Authentication settings.",
+    "auth/network-request-failed": "Network error. Check your connection and try again."
+  };
+  return map[code] || "Something went wrong. Please try again.";
+}
 
 /* Mobile navigation toggle */
 (function initNav() {

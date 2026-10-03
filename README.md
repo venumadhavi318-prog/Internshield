@@ -29,10 +29,18 @@ by the server; `.env` is git-ignored, `.env.example` is committed):
 | `ADMIN_EMAIL` | Administrator sign-in email | `admin@internshield.local` |
 | `ADMIN_PASSWORD` | Administrator sign-in password | `Admin@12345` |
 
-## Demo admin
-Sign in through the normal login modal: click **Admin**, then enter the
-administrator email/password. The server validates the credentials, issues a
-random in-memory session token, and the browser is redirected to the dashboard.
+## Admin (hidden from the public UI)
+There is no visible "Admin" button or link anywhere in the public site.
+An administrator signs in through the **normal login form**:
+
+1. Click **Login**.
+2. Enter the administrator email/password (from `.env`).
+3. The app routes you to the admin dashboard. A normal student is routed to
+   their own dashboard (`/history.html`).
+
+The server validates the credentials and issues a random in-memory session
+token. Hiding the button is not security — authorization is enforced by the
+server (`adminOnly` middleware on every `/api/admin/*` route).
 
 Change `ADMIN_EMAIL` / `ADMIN_PASSWORD` in `.env` before publishing.
 
@@ -53,12 +61,15 @@ You can later connect Gemini/OpenAI in the backend. Keep the API key only in a s
 
 
 ## Firebase edition
-Firebase is now integrated for student authentication, Firestore analysis history, and optional offer-file storage. See `FIREBASE_SETUP.md`.
+Firebase is integrated for student authentication (Email/Password + Google),
+Firestore analysis history, and optional offer-file storage. See `FIREBASE_SETUP.md`.
+The Firebase Web config lives in `public/js/firebase-config.js`; it is public by
+design, and access is enforced by `firestore.rules` / `storage.rules`.
 
 
 ## Scroll-Driven Hero Assignment Features
-The homepage now includes the requested animation-focused assignment layer:
-- Full first-screen hero section ("INTERNSHIP SAFETY, REIMAGINED") with letter-spaced eyebrow typography.
+The homepage includes the requested animation-focused assignment layer:
+- Full first-screen hero ("INTERNSHIP SAFETY, REIMAGINED") with letter-spaced eyebrow typography.
 - Product demo metrics (95% / 12+ / 24/7) with individual staggered entrance and count-up animation, clearly labelled as demo values.
 - GSAP + ScrollTrigger initial-load timeline and scroll-driven motion.
 - The main InternShield shield visual moves right, scales, rotates, moves left and settles — driven directly by scroll progress via `scrub`.
@@ -71,5 +82,7 @@ The homepage now includes the requested animation-focused assignment layer:
 - Existing internship checker, Firebase student history, authentication, and admin dashboard are preserved.
 
 ## Landing page structure
-Navbar → Hero → Statistics → Scroll-driven verification story → How it works → Risk signals → Call to action → Checker → Footer.
+Navbar → Hero → Statistics → Scroll-driven verification story → How It Works → What We Check → Call to action → Checker → About → Footer.
+
+Public navigation contains only: Home, How It Works, What We Check, Check Internship, About, and Login. No admin entry point is exposed.
 

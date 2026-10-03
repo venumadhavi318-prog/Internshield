@@ -1,4 +1,4 @@
-import { auth, signupStudent, loginStudent, loginWithGoogle, saveAnalysis, watchAuth } from "./js/firebase.js";
+import { auth, signupStudent, loginStudent, loginWithGoogle, saveAnalysis, watchAuth, getUserRole } from "./js/firebase.js";
 
 let isSignup = false, currentUser = null;
 const $ = id => document.getElementById(id);
@@ -58,7 +58,6 @@ $("googleBtn").onclick = async () => {
     }
   } finally { btn.disabled = false; }
 };
-$("adminBtn").onclick = () => { openAuth(false); $("authMsg").textContent = "Administrator: sign in with your admin credentials."; };
 document.querySelector("[data-close]").onclick = () => modal.classList.add("hidden");
 modal.addEventListener("click", e => { if (e.target === modal) modal.classList.add("hidden"); });
 
@@ -84,7 +83,7 @@ $("authForm").onsubmit = async e => {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
       });
-      if (!lr.ok) { $("authMsg").textContent = "Admin sign-in failed. Please try again."; return; }
+      if (!lr.ok) { $("authMsg").textContent = "Sign-in failed. Please try again."; return; }
       const { token } = await lr.json();
       localStorage.setItem("internshield_admin_token", token);
       modal.classList.add("hidden");
@@ -98,7 +97,11 @@ $("authForm").onsubmit = async e => {
       await signupStudent($("authName").value, email, password);
       $("authMsg").textContent = "Account created. You are signed in.";
     } else {
-      await loginStudent(email, password); modal.classList.add("hidden");
+      const user = await loginStudent(email, password);
+      modal.classList.add("hidden");
+      // Role-based destination: admins to the dashboard, students to their checks.
+      const role = await getUserRole(user);
+      location.href = role === "admin" ? "/admin.html" : "/history.html";
     }
   } catch (err) { $("authMsg").textContent = friendlyAuthError(err); }
 };
@@ -124,9 +127,9 @@ function friendlyAuthError(err) {
   return map[code] || "Something went wrong. Please try again.";
 }
 
-/* Mobile navigation toggle */
+/* Mobile navigation toggle + translucent-on-scroll navbar */
 (function initNav() {
-  const btn = $("menuBtn"), nav = $("primaryNav");
+  const btn = $("menuBtn"), nav = $("primaryNav"), header = document.querySelector(".nav");
   if (!btn || !nav) return;
   const close = () => { nav.classList.remove("open"); btn.setAttribute("aria-expanded", "false"); };
   btn.addEventListener("click", () => {
@@ -134,4 +137,10 @@ function friendlyAuthError(err) {
     btn.setAttribute("aria-expanded", String(open));
   });
   nav.addEventListener("click", e => { if (e.target.closest("a")) close(); });
+
+  if (header) {
+    const onScroll = () => header.classList.toggle("scrolled", window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+  }
 })();

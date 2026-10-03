@@ -63,3 +63,13 @@ export async function getMyAnalyses(user){
   return snap.docs.map(d=>({id:d.id,...d.data()})).filter(x=>x.uid===user.uid);
 }
 export function watchAuth(callback){ return onAuthStateChanged(auth,callback); }
+
+/* Role is read from the user's own Firestore profile (rules permit self-read).
+   Missing/failed lookups fall back to the least-privileged role. */
+export async function getUserRole(user){
+  if(!user) return "student";
+  try{
+    const snap=await getDoc(doc(db,"users",user.uid));
+    return (snap.exists() && snap.data().role) || "student";
+  }catch{ return "student"; }
+}

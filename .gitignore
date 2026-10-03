@@ -1,3 +1,9 @@
 node_modules/
+
+# Local secrets — never commit real environment files
 .env
+.env.*
+!.env.example
+
+# Runtime data
 data/*.json

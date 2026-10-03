@@ -18,11 +18,11 @@
   </button>
   <nav id="primaryNav" class="navLinks" aria-label="Primary">
     <a href="#home">Home</a>
-    <a href="#how">How it works</a>
-    <a href="#checks">What we check</a>
-    <a href="#checker">Check Offer</a>
+    <a href="#how">How It Works</a>
+    <a href="#checks">What We Check</a>
+    <a href="#checker">Check Internship</a>
+    <a href="#about">About</a>
     <button id="loginBtn" class="ghost">Login</button>
-    <button id="adminBtn" class="ghost">Admin</button>
   </nav>
 </header>
 
@@ -39,7 +39,7 @@
       <p class="heroText heroReveal">Verify internship opportunities before you apply, share personal information, or pay fees.</p>
       <div class="heroActions heroReveal">
         <a class="primary btnLg" href="#checker">Check an Internship</a>
-        <a class="ghost btnLg heroGhost" href="#how">Explore How It Works</a>
+        <a class="ghost btnLg heroGhost" href="#how">How It Works</a>
       </div>
       <ul class="trustRow heroReveal" aria-label="Product notes">
         <li>Transparent rule-based scoring</li>
@@ -147,25 +147,33 @@
   <div class="sectionHead">
     <div>
       <p class="eyebrow">HOW IT WORKS</p>
-      <h2 id="howTitle">Three simple steps</h2>
+      <h2 id="howTitle">Three steps to a safer decision</h2>
     </div>
-      <span class="tag">Transparent scoring methodology</span>
   </div>
   <div class="steps">
-    <article class="revealCard">
-      <b>01</b>
-      <h3>Paste</h3>
-      <p>Enter the internship offer and any available company, recruiter, and link details.</p>
+    <article class="revealCard stepCard">
+      <span class="stepIcon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5 21 21"/></svg>
+      </span>
+      <b>STEP 01</b>
+      <h3>Discover</h3>
+      <p>Submit an internship opportunity, job post, recruitment message, or offer that you want to evaluate.</p>
     </article>
-    <article class="revealCard">
-      <b>02</b>
+    <article class="revealCard stepCard">
+      <span class="stepIcon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3"/><path d="M12 18v3"/><path d="M3 12h3"/><path d="M18 12h3"/><circle cx="12" cy="12" r="4.2"/></svg>
+      </span>
+      <b>STEP 02</b>
       <h3>Analyze</h3>
-      <p>InternShield evaluates the offer against a transparent set of warning-sign rules and explains every signal it detects.</p>
+      <p>InternShield examines the opportunity for important risk indicators, inconsistencies, suspicious requests, and warning signs.</p>
     </article>
-    <article class="revealCard">
-      <b>03</b>
+    <article class="revealCard stepCard">
+      <span class="stepIcon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v6c0 4.2 3 7.6 7 9 4-1.4 7-4.8 7-9V6l-7-3Z"/><path d="m9 12 2.2 2.2L15.5 10"/></svg>
+      </span>
+      <b>STEP 03</b>
       <h3>Verify</h3>
-      <p>Use the risk result and checklist to verify the organization independently before proceeding.</p>
+      <p>Review the assessment and identified warning signs before deciding whether to continue with the opportunity.</p>
     </article>
   </div>
 </section>
@@ -189,9 +197,9 @@
 <section class="ctaBand" aria-labelledby="ctaTitle">
   <div class="ctaInner revealCard">
     <div>
-      <p class="eyebrow">READY WHEN YOU ARE</p>
-      <h2 id="ctaTitle">Check an internship before you commit.</h2>
-      <p>Paste the offer you received and review the risk signals in seconds.</p>
+      <p class="eyebrow">BEFORE YOU COMMIT</p>
+      <h2 id="ctaTitle">Before You Apply, Verify.</h2>
+      <p>Take a moment to evaluate an internship opportunity before sharing your information or making a payment.</p>
     </div>
     <a class="primary btnLg" href="#checker">Check an Internship</a>
   </div>
@@ -204,7 +212,6 @@
       <p class="eyebrow">OFFER CHECKER</p>
       <h2 id="checkerTitle">Analyze an internship</h2>
     </div>
-    <span class="tag">Runs entirely within InternShield</span>
   </div>
   <div class="grid">
     <form id="checkerForm" class="panel">
@@ -225,6 +232,27 @@
       <h3>Your result will appear here</h3>
       <p>We'll look for common warning signals and explain what to verify.</p>
     </div>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section id="about" class="section soft" aria-labelledby="aboutTitle">
+  <p class="eyebrow">ABOUT INTERNSHIELD</p>
+  <h2 id="aboutTitle">A safety layer for the internship search</h2>
+  <p class="sectionLead">InternShield helps students evaluate internship opportunities before they commit — before sharing personal information, documents, or money. It examines an offer for common warning signs and explains what to verify, so you can make an informed decision instead of relying on guesswork.</p>
+  <div class="aboutGrid">
+    <article class="aboutCard revealCard">
+      <h3>Clear, explainable results</h3>
+      <p>Every result lists the specific signals that were detected, so you can see exactly why an offer was flagged.</p>
+    </article>
+    <article class="aboutCard revealCard">
+      <h3>Private by default</h3>
+      <p>Your checks are tied to your own account. Saved history is scoped to you and protected by account-level rules.</p>
+    </article>
+    <article class="aboutCard revealCard">
+      <h3>Guidance, not a verdict</h3>
+      <p>InternShield provides a risk assessment to inform your decision — it is not a legal or definitive determination.</p>
+    </article>
   </div>
 </section>
 </main>
@@ -252,8 +280,27 @@
 
 <footer>
   <div class="footInner">
-    <div class="footBrand">InternShield</div>
-    <p>Built as a student safety project • Risk assessment is informational only.</p>
+    <div class="footTop">
+      <div class="footCol">
+        <div class="footBrand">InternShield</div>
+        <p class="footTag">Helping students make safer internship decisions.</p>
+      </div>
+      <nav class="footNav" aria-label="Footer">
+        <div>
+          <h4>Product</h4>
+          <a href="#home">Home</a>
+          <a href="#how">How It Works</a>
+          <a href="#checker">Check Internship</a>
+        </div>
+        <div>
+          <h4>Learn</h4>
+          <a href="#checks">What We Check</a>
+          <a href="#about">About</a>
+          <a href="history.html">My Checks</a>
+        </div>
+      </nav>
+    </div>
+    <p class="footLegal">Risk assessment is informational only and is not a legal or definitive determination.</p>
   </div>
 </footer>
 

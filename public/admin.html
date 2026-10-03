@@ -27,7 +27,7 @@
 </style>
 </head>
 <body>
-<header class="nav"><div class="brand">🛡️ Intern<span>Shield</span> <small>ADMIN</small></div><a href="/">← Back to site</a></header>
+<header class="nav"><div class="brand">🛡️ Intern<span>Shield</span> <small>ADMIN</small></div><nav class="navLinks"><a href="/">← Back to site</a><button id="signout" class="ghost">Sign out</button></nav></header>
 <main class="adminWrap">
   <div class="sectionHead"><div><p class="eyebrow">ADMIN CONSOLE</p><h1>Risk monitoring dashboard</h1></div><button id="refresh" class="ghost">Refresh</button></div>
   <div class="stats">
@@ -52,6 +52,8 @@ async function load(){
   document.getElementById("table").innerHTML=rows.length?`<div class="table"><div class="tr th"><span>Date</span><span>Company</span><span>Offer</span><span>Risk</span></div>${rows.slice(0,50).map(x=>`<div class="tr"><span>${new Date(x.createdAt).toLocaleString()}</span><span>${esc(x.company||"—")}</span><span>${esc(x.title||"—")}</span><span class="risk ${x.level.toLowerCase()}">${x.level} · ${x.score}</span></div>`).join("")}</div>`:"No analyses yet.";
 }
 function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
-document.getElementById("refresh").onclick=load; load();
+document.getElementById("refresh").onclick=load;
+document.getElementById("signout").onclick=()=>{localStorage.removeItem("internshield_admin_token");location.href="/";};
+load();
 </script>
 </body></html>

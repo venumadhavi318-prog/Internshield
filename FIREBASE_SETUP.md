@@ -33,10 +33,16 @@
   the student is signed in before writing history.
 
 ## Admin
-Admin sign-in happens through the same login modal used by students. The server
-issues an in-memory session token; set `ADMIN_EMAIL` / `ADMIN_PASSWORD` in `.env`.
-For a production deployment, replace the demo admin flow with Firebase Admin
-SDK/custom claims and persistent server-side session validation.
+There is no visible admin button or link. Admin sign-in happens through the same
+login form used by students; the app detects the role and routes admins to
+`/admin.html` and students to `/history.html`. The server issues an in-memory
+session token; set `ADMIN_EMAIL` / `ADMIN_PASSWORD` in `.env`.
+
+To grant Firebase admin privileges, set the user's `users/{uid}` document
+`role` field to `"admin"` in Firestore. The app reads that field after sign-in to
+choose the destination. For a production deployment, enforce this with the
+Firebase Admin SDK and custom claims instead of a self-writable `role` field,
+and add persistent server-side session validation.
 
 ## Gemini
 No Gemini key is required for the included detector. If you add Gemini, call it from the Express backend and store the key in `.env`, never in frontend code.
